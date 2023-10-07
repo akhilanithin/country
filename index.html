@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country</title>
+    <!-- link boostrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <h1 class="text-center text-warning mt-5">Know More About countries!!!</h1>
+    <div class="d-flex align-items-center mx-auto justify-content-center mt-5 w-50">
+        <input type="text" id="country" placeholder="search by country" class="form-control m-3">
+        <button onclick="search()" class="btn btn-primary" type="button">
+            <i class="bi bi bi-search" style="font-size: 1rem; color:black;"></i>
+        </button>
+    </div>
+    <div id="result" class="text-center mt-5 text-warning"></div>
+
+
+
+
+
+
+</body>
+
+
+<script>
+    const search = async () => { //check user provide input or  not
+
+        Country = country.value
+        console.log(Country);
+        if (Country) {
+            //    api call
+            const response = await fetch(`https://restcountries.com/v3.1/name/${Country}?fullText=true`)
+            const countryDetails = await response.json()
+            console.log(countryDetails[0]);
+
+            if (response.status == 200) {
+                let flags = countryDetails[0].flags.png
+                let flagsalt = countryDetails[0].flags.alt
+                let countryName = countryDetails[0].name.common
+                let capital = countryDetails[0].capital
+                let population = countryDetails[0].population
+                let timezone = countryDetails[0].timezones
+                let continent = countryDetails[0].continents
+
+                let currencies = countryDetails[0].currencies
+                let CountryCode = Object.keys(currencies)
+                let currencyName = currencies[CountryCode[0]].name
+                let currencySymbol = currencies[CountryCode[0]].symbol
+
+
+                let Languages = countryDetails[0].languages
+                let Alllanguage = Object.values(Languages)
+
+                let googleMaps = countryDetails[0].maps.googleMaps
+
+                result.innerHTML = `
+                            <div class="card align-items-center mx-auto justify-content-center mt-5 w-25" style="width: 22rem;">
+
+                                <img class="card-img-top" src="${flags}" alt="${flagsalt}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${countryName}</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">capital :${capital}</li>
+                                    <li class="list-group-item">population :${population}</li>
+                                    <li class="list-group-item">timezone :${timezone}</li>
+                                    <li class="list-group-item">continent :${continent}</li>
+                                    <li class="list-group-item">currencies :
+
+                                        ${currencySymbol},${currencyName}</li>
+                                    <li class="list-group-item">Languages :${Alllanguage}</li>
+
+                                </ul>
+                                <div class="card-body">
+                                    <a href="${googleMaps}" target="_blank" class="card-
+
+                                    link">Click here to view in map </a>
+
+                                </div>
+
+                            </div>
+                                
+                    `
+
+            } else {
+                alert("**Country not found ")
+
+            }
+
+        }
+        else {
+            document.getElementById("result").innerHTML = "**Choose a Country please!";
+            return false;
+        }
+    }
+
+</script>
+
+
+
+<!-- boostrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+
+</html>
